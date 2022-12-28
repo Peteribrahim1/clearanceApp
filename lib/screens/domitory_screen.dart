@@ -1,11 +1,15 @@
 import 'package:clearance_app/screens/tuition_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/styles.dart';
+import '../widgets/domitory_dialog.dart';
 import 'library_screen.dart';
 
 class DomitoryScreen extends StatelessWidget {
-  const DomitoryScreen({Key? key}) : super(key: key);
+  const DomitoryScreen({Key? key, required this.email}) : super(key: key);
+
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -19,103 +23,117 @@ class DomitoryScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            SizedBox(height: 50),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              height: 400,
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Domitory fees status',
-                      textAlign: TextAlign.center,
-                      style: Styles.clearedTextStyle,
-                    ),
-                    SizedBox(height: 10),
-                    const Text(
-                      'Peter Smith Jordan',
-                      textAlign: TextAlign.center,
-                      style: Styles.dashTextStyle,
-                    ),
-                    SizedBox(height: 5),
-                    const Text(
-                      'UJ/2014/NS/0108',
-                      textAlign: TextAlign.center,
-                      style: Styles.dashTextStyle,
-                    ),
-                    const SizedBox(height: 40),
-                    const Text(
-                      'Cleared',
-                      style: Styles.clearedTextStyle,
-                    ),
-                    SizedBox(height: 140),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: email).snapshots(),
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                const SizedBox(height: 50),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  height: 400,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
                       children: [
-                        SizedBox(
-                          height: 48,
-                          width: 120,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  Colors.blue),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                            child: const Text(
-                              'Back',
-                              style: Styles.buttonTextStyle,
-                            ),
-                          ),
+                        const Text(
+                          'Domitory Status',
+                          textAlign: TextAlign.center,
+                          style: Styles.clearedTextStyle,
                         ),
-                        SizedBox(
-                          height: 48,
-                          width: 120,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LibraryScreen()),
-                              );
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  Colors.deepPurple),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                        const SizedBox(height: 10),
+                        Text(
+                          snapshot.data!.docs[0]['name'],
+                          textAlign: TextAlign.center,
+                          style: Styles.dashTextStyle,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          snapshot.data!.docs[0]['matricNumber'],
+                          textAlign: TextAlign.center,
+                          style: Styles.dashTextStyle,
+                        ),
+                        const SizedBox(height: 40),
+                        Text(snapshot.data!.docs[0]["domitoryFee"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have outstanding domitory fees that has not been paid. Kindly clear all outstanding fees before you can continue with your clearance.", style: Styles.clearedTextStyle),
+
+                        const SizedBox(height: 60),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              height: 48,
+                              width: 120,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.blue),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Back',
+                                  style: Styles.buttonTextStyle,
                                 ),
                               ),
                             ),
-                            child: const Text(
-                              'Proceed',
-                              style: Styles.buttonTextStyle,
+                            SizedBox(
+                              height: 48,
+                              width: 120,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  snapshot.data!.docs[0]["domitoryFee"]?  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => LibraryScreen(email: email,)),
+                                  ) : showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                      const DomitoryDialog());
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.deepPurple),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Proceed',
+                                  style: Styles.buttonTextStyle,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+
+        },
       ),
     );
   }

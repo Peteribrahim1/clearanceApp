@@ -1,6 +1,9 @@
 import 'package:clearance_app/screens/role_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../resources/auth_methods.dart';
 import '../styles/styles.dart';
+import '../utils/utils.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({Key? key}) : super(key: key);
@@ -10,6 +13,21 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _matricController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    _matricController.dispose();
+    super.dispose();
+  }
+
+  bool _isLoading = false;
 
   bool clearValueGrad = false;
   bool unclearValueGrad = true;
@@ -25,6 +43,44 @@ class _AdminScreenState extends State<AdminScreen> {
 
   bool clearValueLab = false;
   bool unclearValueLab = true;
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().signUpUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+      name: _nameController.text,
+      matNumber: _matricController.text,
+      gradStatus: clearValueGrad,
+      tuition: clearValueTuition,
+      domitory: clearValueDom,
+      library: clearValueLib,
+      lab: clearValueLab,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (res != 'success') {
+      showSnackBar(res, context);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const RoleScreen(),
+        ),
+      );
+      //test run
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.black,
+          content: Text('Student record saved successfully!'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +112,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 5),
             TextField(
+              controller: _nameController,
               decoration: InputDecoration(
                 filled: true,
                 counterText: "",
@@ -83,6 +140,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 5),
             TextField(
+              controller: _matricController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -109,6 +167,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 5),
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -135,6 +194,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 5),
             TextField(
+              controller: _passwordController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -172,7 +232,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    clearValueGrad? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    clearValueGrad
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
@@ -187,13 +249,14 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    unclearValueGrad? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    unclearValueGrad
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 15),
             const Text(
               'Tuition Fees',
@@ -212,7 +275,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    clearValueTuition? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    clearValueTuition
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
@@ -227,13 +292,14 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    unclearValueTuition? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    unclearValueTuition
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 15),
             const Text(
               'Domitory Fees',
@@ -252,7 +318,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    clearValueDom? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    clearValueDom
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
@@ -267,13 +335,14 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    unclearValueDom? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    unclearValueDom
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 15),
             const Text(
               'Library',
@@ -292,7 +361,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    clearValueLib? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    clearValueLib
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
@@ -307,13 +378,14 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    unclearValueLib? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    unclearValueLib
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 15),
             const Text(
               'Laboratory',
@@ -332,7 +404,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    clearValueLab? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    clearValueLab
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
@@ -347,7 +421,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     });
                   },
                   child: Icon(
-                    unclearValueLab? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    unclearValueLab
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                   ),
                 ),
@@ -359,30 +435,38 @@ class _AdminScreenState extends State<AdminScreen> {
                 height: 52,
                 width: 280,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const RoleScreen()),
-                    );
-                  },
+                  onPressed: signUpUser,
+                  // onPressed: () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const RoleScreen()),
+                  //   );
+                  // },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      Colors.deepPurple,),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                          ),
+                      Colors.deepPurple,
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                    ),
                   ),
-                  child: const Text(
-                    'Submit Student Record',
-                    style: Styles.buttonTextStyle,
-                  ),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'Submit Student Record',
+                          style: Styles.buttonTextStyle,
+                        ),
                 ),
               ),
             ),
             const SizedBox(height: 50),
-
           ],
         ),
       ),

@@ -55,7 +55,7 @@ class Styles {
 
   static const clearedTextStyle = TextStyle(
     fontFamily: 'Raleway',
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: FontWeight.w600,
     color: Color.fromRGBO(0, 0, 51, 1),
   );

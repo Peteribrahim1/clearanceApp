@@ -1,12 +1,42 @@
 import 'package:clearance_app/screens/role_screen.dart';
 import 'package:clearance_app/screens/tuition_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/styles.dart';
 import 'congrats_screen.dart';
 
-class CongratScreen extends StatelessWidget {
+class CongratScreen extends StatefulWidget {
   const CongratScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CongratScreen> createState() => _CongratScreenState();
+}
+
+class _CongratScreenState extends State<CongratScreen> {
+  bool _isLoading = false;
+
+  void logOut() async {
+    setState(() {
+      _isLoading = true;
+    });
+    FirebaseAuth.instance.signOut();
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const RoleScreen(),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.black,
+        content: Text('You are logged out!'),
+      ),
+    );
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +76,7 @@ class CongratScreen extends StatelessWidget {
                         width: 160,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const RoleScreen()),
-                            );
+                           logOut();
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
@@ -61,7 +88,7 @@ class CongratScreen extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            'Back to Home',
+                            'log out',
                             style: Styles.buttonTextStyle,
                           ),
                         ),

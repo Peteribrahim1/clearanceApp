@@ -40,15 +40,16 @@ class _SplashScreenState extends State<SplashScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.30),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.33),
             Center(
               child: Container(
-                width: 150,
-                height: 150,
-                child: Image.asset('assets/images/gradcap.png'),
+                width: 100,
+                height: 100,
+                child: Icon(Icons.school, size: 120, color: Colors.deepPurple,),
               ),
             ),
-            Text('Online Clearance APP'),
+            SizedBox(height: 10),
+            Center(child: Text('Online Clearance', style: TextStyle(fontSize: 20, color: Colors.deepPurple),)),
           ],
         ),
       ),

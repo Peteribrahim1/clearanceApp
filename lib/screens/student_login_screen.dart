@@ -1,10 +1,80 @@
 import 'package:clearance_app/screens/graduation_status_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../resources/auth_methods.dart';
 import '../styles/styles.dart';
+import '../utils/utils.dart';
 
-class StudentLoginScreen extends StatelessWidget {
+class StudentLoginScreen extends StatefulWidget {
   const StudentLoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<StudentLoginScreen> createState() => _StudentLoginScreenState();
+}
+
+class _StudentLoginScreenState extends State<StudentLoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _matricController = TextEditingController();
+
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _matricController.dispose();
+  }
+
+
+  // String dbMatric = '';
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getMatric();
+  // }
+  //
+  // void getMatric() async {
+  //   DocumentSnapshot snap = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .get();
+  //
+  //   setState(() {
+  //     dbMatric = (snap.data() as Map<String, dynamic>)['matricNumber'];
+  //   });
+  // }
+
+
+  void loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().loginUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+      matric: _matricController.text,
+      //dbMatric: dbMatric,
+    );
+
+    if (res == 'success') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => GraduationStatusScreen(email: _emailController.text),
+        ),
+      );
+    } else {
+      showSnackBar(res, context);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,53 +88,54 @@ class StudentLoginScreen extends StatelessWidget {
               Row(
                 children: [
                   InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
                       child: const Icon(Icons.arrow_back)),
                 ],
               ),
               const SizedBox(height: 15),
-              const Center(
+               const Center(
                 child: Text(
                   'Student login',
                   style: Styles.headerTextStyle,
                 ),
               ),
               const SizedBox(height: 25),
-
+              // const Text(
+              //   'Matriculation number ',
+              //   style: Styles.fieldTextStyle,
+              // ),
+              // const SizedBox(height: 5),
+              // TextField(
+              //   controller: _matricController,
+              //   decoration: InputDecoration(
+              //     filled: true,
+              //     fillColor: Colors.white,
+              //     prefixIcon: const Icon(
+              //       Icons.perm_identity,
+              //     ),
+              //     contentPadding: const EdgeInsets.all(18),
+              //     hintText: 'matric number',
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(15),
+              //     ),
+              //     enabledBorder: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(15),
+              //       borderSide: const BorderSide(
+              //           color: Color.fromRGBO(20, 10, 38, 1), width: 1),
+              //     ),
+              //     hintStyle: Styles.hintTextStyle,
+              //   ),
+              // ),
+              // const SizedBox(height: 15),
               const Text(
-                'Matriculation number ',
+                'Student Email ',
                 style: Styles.fieldTextStyle,
               ),
               const SizedBox(height: 5),
               TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  prefixIcon: const Icon(
-                    Icons.perm_identity,
-                  ),
-                  contentPadding: const EdgeInsets.all(18),
-                  hintText: 'matric number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                        color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-                  ),
-                  hintStyle: Styles.hintTextStyle,
-                ),
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                'Email ',
-                style: Styles.fieldTextStyle,
-              ),
-              const SizedBox(height: 5),
-              TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -91,6 +162,7 @@ class StudentLoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               TextField(
+                controller: _passwordController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -110,36 +182,35 @@ class StudentLoginScreen extends StatelessWidget {
                   hintStyle: Styles.hintTextStyle,
                 ),
               ),
-
               const SizedBox(height: 35),
               Center(
                 child: SizedBox(
                   height: 52,
                   width: 280,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const GraduationStatusScreen()),
-                      );
-                    },
+                    onPressed: loginUser,
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                         Colors.deepPurple,),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                            )
-                        )
-                    ),
-                    child: const Text(
-                      'Login',
-                      style: Styles.buttonTextStyle,
-                    ),
+                        backgroundColor: MaterialStateProperty.all(
+                          Colors.deepPurple,
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ))),
+                    child: _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Login',
+                            style: Styles.buttonTextStyle,
+                          ),
                   ),
                 ),
               ),
-
             ],
           ),
         ),
