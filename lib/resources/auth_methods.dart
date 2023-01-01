@@ -19,6 +19,7 @@ class AuthMethods {
     required bool domitory,
     required bool library,
     required bool lab,
+    required String department,
   }) async {
     String res = 'Please enter all the fields';
     try {
@@ -42,6 +43,7 @@ class AuthMethods {
           'library': library,
           'laboratory': lab,
           'uid': cred.user!.uid,
+          'department': department,
         });
         res = 'success';
       }

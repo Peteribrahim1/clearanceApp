@@ -1,6 +1,8 @@
 import 'package:clearance_app/screens/role_screen.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
 import '../resources/auth_methods.dart';
 import '../styles/styles.dart';
 import '../utils/utils.dart';
@@ -13,6 +15,31 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
+  List<dynamic> faculties = [];
+  List<dynamic> departmentsMasters = [];
+  List<dynamic> departments = [];
+
+  String? facultyId;
+  String? departmentId;
+
+  @override
+  void initState() {
+    super.initState();
+    this.faculties.add({"id": 1, "name": "Science"});
+    this.faculties.add({"id": 2, "name": "Art"});
+
+    this.departmentsMasters = [
+      {"ID": 1, "Name": "Microbiology", "ParentId": 1},
+      {"ID": 2, "Name": "Computer Science", "ParentId": 1},
+      {"ID": 3, "Name": "Chemistry ", "ParentId": 1},
+      {"ID": 4, "Name": "Physics", "ParentId": 1},
+      {"ID": 1, "Name": "History", "ParentId": 2},
+      {"ID": 2, "Name": "Political Science", "ParentId": 2},
+      {"ID": 3, "Name": "Sociology", "ParentId": 2},
+      {"ID": 4, "Name": "Music", "ParentId": 2},
+    ];
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -58,6 +85,7 @@ class _AdminScreenState extends State<AdminScreen> {
       domitory: clearValueDom,
       library: clearValueLib,
       lab: clearValueLab,
+      department: departmentId.toString()
     );
 
     setState(() {
@@ -213,6 +241,119 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
                 hintStyle: Styles.hintTextStyle,
               ),
+            ),
+            const SizedBox(height: 15),
+            // const Text(
+            //   'Faculty',
+            //   style: Styles.fieldTextStyle,
+            // ),
+            // const SizedBox(height: 5),
+            // SizedBox(
+            //   height: 56,
+            //   child: DropdownButtonFormField2(
+            //     decoration: InputDecoration(
+            //       //Add isDense true and zero Padding.
+            //       //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+            //       isDense: true,
+            //       contentPadding: EdgeInsets.zero,
+            //       border: OutlineInputBorder(
+            //         borderSide: const BorderSide(
+            //           color: Colors.black,
+            //         ),
+            //         borderRadius: BorderRadius.circular(15),
+            //       ),
+            //       //Add more decoration as you want here
+            //       //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+            //     ),
+            //     isExpanded: true,
+            //     hint: const Text(
+            //       'Faculty*',
+            //       style: Styles.hintTextStyle,
+            //     ),
+            //     icon: const Icon(
+            //       Icons.arrow_drop_down,
+            //       color: Colors.black45,
+            //     ),
+            //     iconSize: 30,
+            //     buttonHeight: 58,
+            //     buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+            //     dropdownDecoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(15),
+            //     ),
+            //     items: facultyItems
+            //         .map((item) => DropdownMenuItem<String>(
+            //               value: item,
+            //               child: Text(
+            //                 item,
+            //                 style: Styles.hintTextStyle,
+            //               ),
+            //             ))
+            //         .toList(),
+            //     validator: (value) {
+            //       if (value == null) {
+            //         return 'Please select a faculty.';
+            //       }
+            //     },
+            //     onChanged: (value) {
+            //       //Do something when changing the item if you want.
+            //     },
+            //     onSaved: (value) {
+            //       selectedValue = value.toString();
+            //     },
+            //   ),
+            // ),
+            const SizedBox(height: 15),
+            SizedBox(
+              width: double.infinity,
+              child: FormHelper.dropDownWidget(
+                context,
+                'select faculty',
+                this.facultyId,
+                this.faculties,
+                (onChangedVal) {
+                  this.facultyId = onChangedVal;
+                  print('selected faculty: $onChangedVal');
+
+                  this.departments = this
+                      .departmentsMasters
+                      .where(
+                        (departmentItem) =>
+                            departmentItem["ParentId"].toString() ==
+                            onChangedVal.toString(),
+                      )
+                      .toList();
+                  this.departmentId = null;
+                  setState(() {});
+                },
+                (onValidateVal) {
+                  if (onValidateVal == null) {
+                    return 'Please select faculty';
+                  }
+                  return null;
+                },
+                borderColor: Color.fromRGBO(20, 10, 38, 1),
+                borderRadius: 15,
+                // optionValue: 'id',
+                // optionLabel: 'label',
+              ),
+            ),
+            const SizedBox(height: 15),
+            FormHelper.dropDownWidget(
+              context,
+              'select department',
+              this.departmentId,
+              this.departments,
+              (onChangedVal) {
+                this.departmentId = onChangedVal;
+                print('selected department $onChangedVal');
+              },
+              (onValidate) {
+                return null;
+              },
+              borderColor: Color.fromRGBO(20, 10, 38, 1),
+              borderRadius: 15,
+              optionValue: 'ID',
+              optionLabel: 'Name',
             ),
             const SizedBox(height: 15),
             const Text(
@@ -436,13 +577,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 width: 280,
                 child: ElevatedButton(
                   onPressed: signUpUser,
-                  // onPressed: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const RoleScreen()),
-                  //   );
-                  // },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       Colors.deepPurple,
@@ -473,3 +607,11 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
 }
+
+String? selectedValue;
+
+final List<String> facultyItems = [
+  'Science',
+  'Art',
+  'Social Science',
+];
