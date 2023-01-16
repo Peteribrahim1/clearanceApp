@@ -32,7 +32,7 @@ class GraduationStatusScreen extends StatelessWidget {
             );
           }
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
                 const SizedBox(height: 50),
@@ -44,28 +44,66 @@ class GraduationStatusScreen extends StatelessWidget {
                   height: 400,
                   width: double.infinity,
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
                         const Text(
                           'Graduation Status',
                           textAlign: TextAlign.center,
-                          style: Styles.clearedTextStyle,
+                          style: Styles.subTextStyle,
                         ),
                         const SizedBox(height: 10),
-                         Text(
-                           snapshot.data!.docs[0]['name'],
-                          textAlign: TextAlign.center,
-                          style: Styles.dashTextStyle,
-                        ),
-                        const SizedBox(height: 5),
-                         Text(
-                          snapshot.data!.docs[0]['matricNumber'],
-                          textAlign: TextAlign.center,
-                          style: Styles.dashTextStyle,
-                        ),
-                        const SizedBox(height: 40),
-                         Center(child: Text(snapshot.data!.docs[0]["graduationStatus"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have pending academic issues to clear before you can continue with your clearance. See your coordinator for more details.", style: Styles.clearedTextStyle)),
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.start,
+                           children: [
+                             Icon(Icons.person, size: 115, color: Colors.grey,),
+                             Flexible(
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   FittedBox(
+                                     child: Text(
+                                       "Name: ${snapshot.data!.docs[0]['name']}",
+                                       textAlign: TextAlign.center,
+                                       overflow: TextOverflow.ellipsis,
+                                       style: Styles.dashboardTextStyle,
+                                     ),
+                                   ),
+                                   const SizedBox(height: 2),
+                                   FittedBox(
+                                     child: Text(
+                                       "ID Num: ${snapshot.data!.docs[0]['matricNumber']}",
+                                       textAlign: TextAlign.center,
+                                       overflow: TextOverflow.ellipsis,
+                                       style: Styles.dashboardTextStyle,
+                                     ),
+                                   ),
+                                   const SizedBox(height: 2),
+                                   FittedBox(
+                                     child: Text(
+                                       "Faculty: ${snapshot.data!.docs[0]['faculty']}",
+                                       textAlign: TextAlign.center,
+                                       overflow: TextOverflow.ellipsis,
+                                       style: Styles.dashboardTextStyle,
+                                     ),
+                                   ),
+                                   const SizedBox(height: 2),
+                                   FittedBox(
+                                     child: Text(
+                                       "Dept: ${snapshot.data!.docs[0]['department']}",
+                                       textAlign: TextAlign.center,
+                                       overflow: TextOverflow.ellipsis,
+                                       style: Styles.dashboardTextStyle,
+                                     ),
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           ],
+                         ),
+
+                        const SizedBox(height: 10),
+                         Center(child: Text(snapshot.data!.docs[0]["graduationStatus"]?"Qualified! Click proceed to move to the next stage." : "Sorry! You have pending academic issues to clear before you can continue with your clearance. See your coordinator for more details.", style: Styles.clearedTextStyle)),
 
                         const SizedBox(height: 60),
                         Row(

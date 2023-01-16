@@ -21,12 +21,16 @@ class _AdminScreenState extends State<AdminScreen> {
 
   String? facultyId;
   String? departmentId;
+  String? selectedDept;
+  String? selectedFaculty;
 
   @override
   void initState() {
     super.initState();
     this.faculties.add({"id": 1, "name": "Science"});
     this.faculties.add({"id": 2, "name": "Art"});
+    this.faculties.add({"id": 3, "name": "Management"});
+    this.faculties.add({"id": 4, "name": "Environmental"});
 
     this.departmentsMasters = [
       {"ID": 1, "Name": "Microbiology", "ParentId": 1},
@@ -37,6 +41,14 @@ class _AdminScreenState extends State<AdminScreen> {
       {"ID": 2, "Name": "Political Science", "ParentId": 2},
       {"ID": 3, "Name": "Sociology", "ParentId": 2},
       {"ID": 4, "Name": "Music", "ParentId": 2},
+      {"ID": 1, "Name": "Accounting", "ParentId": 3},
+      {"ID": 2, "Name": "Business Admin", "ParentId": 3},
+      {"ID": 3, "Name": "Banking & finance", "ParentId": 3},
+      {"ID": 4, "Name": "Economics", "ParentId": 3},
+      {"ID": 1, "Name": "Architecture", "ParentId": 4},
+      {"ID": 2, "Name": "Building", "ParentId": 4},
+      {"ID": 3, "Name": "Qty survey", "ParentId": 4},
+      {"ID": 4, "Name": "Geography", "ParentId": 4},
     ];
   }
 
@@ -85,7 +97,8 @@ class _AdminScreenState extends State<AdminScreen> {
       domitory: clearValueDom,
       library: clearValueLib,
       lab: clearValueLab,
-      department: departmentId.toString()
+      department: selectedDept.toString(),
+      faculty: selectedFaculty.toString(),
     );
 
     setState(() {
@@ -140,6 +153,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 5),
             TextField(
+              maxLength: 25,
               controller: _nameController,
               decoration: InputDecoration(
                 filled: true,
@@ -168,8 +182,10 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 5),
             TextField(
+              maxLength: 23,
               controller: _matricController,
               decoration: InputDecoration(
+                counterText: '',
                 filled: true,
                 fillColor: Colors.white,
                 prefixIcon: const Icon(
@@ -242,7 +258,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
-            const SizedBox(height: 15),
+            // const SizedBox(height: 15),
             // const Text(
             //   'Faculty',
             //   style: Styles.fieldTextStyle,
@@ -303,49 +319,86 @@ class _AdminScreenState extends State<AdminScreen> {
             //   ),
             // ),
             const SizedBox(height: 15),
-            SizedBox(
-              width: double.infinity,
-              child: FormHelper.dropDownWidget(
-                context,
-                'select faculty',
-                this.facultyId,
-                this.faculties,
-                (onChangedVal) {
-                  this.facultyId = onChangedVal;
-                  print('selected faculty: $onChangedVal');
+            const Text(
+              'Enter Stundent\'s Faculty ',
+              style: Styles.fieldTextStyle,
+            ),
+            const SizedBox(height: 5),
+            FormHelper.dropDownWidget(
+              context,
+              'select faculty',
+              this.facultyId,
+              this.faculties,
+              contentPadding: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
+              (onChangedVal) {
+               var fid = this.facultyId = onChangedVal;
+                print('selected faculty: $onChangedVal');
 
-                  this.departments = this
-                      .departmentsMasters
-                      .where(
-                        (departmentItem) =>
-                            departmentItem["ParentId"].toString() ==
-                            onChangedVal.toString(),
-                      )
-                      .toList();
-                  this.departmentId = null;
-                  setState(() {});
-                },
-                (onValidateVal) {
-                  if (onValidateVal == null) {
-                    return 'Please select faculty';
+                this.departments = this
+                    .departmentsMasters
+                    .where(
+                      (departmentItem) =>
+                          departmentItem["ParentId"].toString() ==
+                          onChangedVal.toString(),
+                    )
+                    .toList();
+                this.departmentId = null;
+                setState(() {});
+
+                for (var element in this.faculties) {
+                  if(element['id'] == int.parse(fid)) {
+                    this.selectedFaculty = element['name'];
                   }
-                  return null;
-                },
-                borderColor: Color.fromRGBO(20, 10, 38, 1),
-                borderRadius: 15,
-                // optionValue: 'id',
-                // optionLabel: 'label',
-              ),
+                }
+                setState(() {
+                  print(this.selectedFaculty);
+                });
+
+              },
+              (onValidateVal) {
+                if (onValidateVal == null) {
+                  return 'Please select faculty';
+                }
+                return null;
+              },
+              borderColor: Color.fromRGBO(20, 10, 38, 1),
+              borderRadius: 15,
+              // optionValue: 'id',
+              // optionLabel: 'label',
             ),
             const SizedBox(height: 15),
+            const Text(
+              'Enter Stundent\'s Department',
+              style: Styles.fieldTextStyle,
+            ),
+            const SizedBox(height: 5),
             FormHelper.dropDownWidget(
               context,
               'select department',
               this.departmentId,
               this.departments,
+              contentPadding: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
               (onChangedVal) {
-                this.departmentId = onChangedVal;
+                var id = this.departmentId = onChangedVal;
+
                 print('selected department $onChangedVal');
+                setState(() {
+
+                });
+
+                for (var element in this.departments) {
+                  if(element['ID'] == int.parse(id)) {
+                    this.selectedDept = element['Name'];
+                  }
+                }
+                setState(() {
+                  print(this.selectedDept);
+                });
+
               },
               (onValidate) {
                 return null;
@@ -528,48 +581,51 @@ class _AdminScreenState extends State<AdminScreen> {
               ],
             ),
             const SizedBox(height: 15),
-            const Text(
-              'Laboratory',
-              style: Styles.fieldTextStyle,
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text('Cleared'),
-                const SizedBox(width: 5),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      clearValueLab = !clearValueLab;
-                      unclearValueLab = !unclearValueLab;
-                    });
-                  },
-                  child: Icon(
-                    clearValueLab
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 20,
+            if (this.selectedFaculty == 'Science')...[
+              const Text(
+                'Laboratory',
+                style: Styles.fieldTextStyle,
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Text('Cleared'),
+                  const SizedBox(width: 5),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        clearValueLab = !clearValueLab;
+                        unclearValueLab = !unclearValueLab;
+                      });
+                    },
+                    child: Icon(
+                      clearValueLab
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      size: 20,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 15),
-                const Text('Uncleared'),
-                const SizedBox(width: 5),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      unclearValueLab = !unclearValueLab;
-                      clearValueLab = !clearValueLab;
-                    });
-                  },
-                  child: Icon(
-                    unclearValueLab
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 20,
+                  const SizedBox(width: 15),
+                  const Text('Uncleared'),
+                  const SizedBox(width: 5),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        unclearValueLab = !unclearValueLab;
+                        clearValueLab = !clearValueLab;
+                      });
+                    },
+                    child: Icon(
+                      unclearValueLab
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      size: 20,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
+
             const SizedBox(height: 35),
             Center(
               child: SizedBox(

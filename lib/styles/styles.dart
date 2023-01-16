@@ -53,11 +53,25 @@ class Styles {
     color: Color.fromRGBO(0, 0, 51, 1),
   );
 
+  static const dashboardTextStyle = TextStyle(
+    fontFamily: 'Raleway',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Color.fromRGBO(0, 0, 51, 1),
+  );
+
   static const clearedTextStyle = TextStyle(
     fontFamily: 'Raleway',
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: Color.fromRGBO(0, 0, 51, 1),
+  );
+
+  static const subTextStyle = TextStyle(
+    fontFamily: 'Raleway',
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Colors.deepPurple,
   );
 
   static const headerTextStyle = TextStyle(

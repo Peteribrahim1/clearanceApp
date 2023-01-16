@@ -20,13 +20,17 @@ class AuthMethods {
     required bool library,
     required bool lab,
     required String department,
+    required String faculty,
   }) async {
     String res = 'Please enter all the fields';
     try {
       if (email.isNotEmpty &&
           password.isNotEmpty &&
           name.isNotEmpty &&
-          matNumber.isNotEmpty) {
+          matNumber.isNotEmpty &&
+          department != null &&
+          faculty != null) {
+
         // register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -44,11 +48,21 @@ class AuthMethods {
           'laboratory': lab,
           'uid': cred.user!.uid,
           'department': department,
+          'faculty': faculty,
+          'password': password,
         });
         res = 'success';
       }
-    } catch (err) {
+    } on FirebaseAuthException catch(err) {
+      if (err.code == 'invalid-email') {
+        res = 'Wrong email format';
+      }
+    }
+
+
+    catch (err) {
       res = err.toString();
+      print(err.toString());
     }
     return res;
   }
@@ -64,12 +78,10 @@ class AuthMethods {
 
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
 
-          await _auth.signInWithEmailAndPassword(
-              email: email, password: password);
-
-          res = 'success';
-
+        res = 'success';
       } else {
         res = 'Please enter all the fields';
       }
@@ -79,31 +91,30 @@ class AuthMethods {
     return res;
   }
 
-  // Future<String> loginUser({
-  //   required String email,
-  //   required String password,
-  //   required String matric,
-  //   required String dbMatric,
-  // }) async {
-  //   String res = 'Some error occured';
-  //
-  //   try {
-  //     if (email.isNotEmpty && password.isNotEmpty && matric.isNotEmpty) {
-  //       if (matric == dbMatric) {
-  //         await _auth.signInWithEmailAndPassword(
-  //             email: email, password: password);
-  //
-  //         res = 'success';
-  //       }
-  //
-  //     } else {
-  //       res = 'Please enter all the fields';
-  //     }
-  //   } catch (err) {
-  //     res = err.toString();
-  //   }
-  //   return res;
-  // }
-
+// Future<String> loginUser({
+//   required String email,
+//   required String password,
+//   required String matric,
+//   required String dbMatric,
+// }) async {
+//   String res = 'Some error occured';
+//
+//   try {
+//     if (email.isNotEmpty && password.isNotEmpty && matric.isNotEmpty) {
+//       if (matric == dbMatric) {
+//         await _auth.signInWithEmailAndPassword(
+//             email: email, password: password);
+//
+//         res = 'success';
+//       }
+//
+//     } else {
+//       res = 'Please enter all the fields';
+//     }
+//   } catch (err) {
+//     res = err.toString();
+//   }
+//   return res;
+// }
 
 }

@@ -1,3 +1,4 @@
+import 'package:clearance_app/screens/congrats_screen.dart';
 import 'package:clearance_app/screens/tuition_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class LibraryScreen extends StatelessWidget {
             );
           }
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
                 const SizedBox(height: 50),
@@ -51,22 +52,59 @@ class LibraryScreen extends StatelessWidget {
                         const Text(
                           'Library Status',
                           textAlign: TextAlign.center,
-                          style: Styles.clearedTextStyle,
+                          style: Styles.subTextStyle,
                         ),
                         const SizedBox(height: 10),
-                        Text(
-                          snapshot.data!.docs[0]['name'],
-                          textAlign: TextAlign.center,
-                          style: Styles.dashTextStyle,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.person, size: 115, color: Colors.grey,),
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FittedBox(
+                                    child: Text(
+                                      "Name: ${snapshot.data!.docs[0]['name']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  FittedBox(
+                                    child: Text(
+                                      "ID Num: ${snapshot.data!.docs[0]['matricNumber']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  FittedBox(
+                                    child: Text(
+                                      "Faculty: ${snapshot.data!.docs[0]['faculty']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  FittedBox(
+                                    child: Text(
+                                      "Dept: ${snapshot.data!.docs[0]['department']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          snapshot.data!.docs[0]['matricNumber'],
-                          textAlign: TextAlign.center,
-                          style: Styles.dashTextStyle,
-                        ),
-                        const SizedBox(height: 40),
-                        Text(snapshot.data!.docs[0]["library"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have pending library issues to resolve before you can continue with your clearance. Kindly meet to the library admin for more details", style: Styles.clearedTextStyle),
+                        const SizedBox(height: 10),
+                        Center(child: Text(snapshot.data!.docs[0]["library"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have pending library issues to resolve before you can continue. Kindly meet to the library admin for more details", style: Styles.clearedTextStyle)),
 
                         const SizedBox(height: 60),
                         Row(
@@ -99,14 +137,23 @@ class LibraryScreen extends StatelessWidget {
                               width: 120,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  snapshot.data!.docs[0]["library"]?  Navigator.push(
+                                  if(snapshot.data!.docs[0]["library"] == true && snapshot.data!.docs[0]["faculty"] == 'Science') {
+                                    Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => LabScreen(email: email,)),
-                                  ) : showDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                      const LibraryDialog());
+                                  );
+                                  } else if (snapshot.data!.docs[0]["library"] == true && snapshot.data!.docs[0]["faculty"] != 'Science') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => CongratScreen()),
+                                    );
+                                  } else {
+                                    showDialog(
+                                        barrierDismissible: true,
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                        const LibraryDialog());
+                                  }
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
