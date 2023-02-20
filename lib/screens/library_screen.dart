@@ -1,16 +1,47 @@
 import 'package:clearance_app/screens/congrats_screen.dart';
+import 'package:clearance_app/screens/role_screen.dart';
 import 'package:clearance_app/screens/tuition_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/styles.dart';
 import '../widgets/library_dialog.dart';
 import 'lab_screen.dart';
 
-class LibraryScreen extends StatelessWidget {
+class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key, required this.email}) : super(key: key);
 
   final String email;
+
+  @override
+  State<LibraryScreen> createState() => _LibraryScreenState();
+}
+
+class _LibraryScreenState extends State<LibraryScreen> {
+  bool _isLoading = false;
+
+  void logOut() async {
+    setState(() {
+      _isLoading = true;
+    });
+    FirebaseAuth.instance.signOut();
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const RoleScreen(),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.black,
+        content: Text('You are logged out!'),
+      ),
+    );
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +53,15 @@ class LibraryScreen extends StatelessWidget {
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
+        leading: InkWell(
+            onTap: () {
+              logOut();
+            },
+            child: Icon(Icons.logout)),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: email).snapshots(),
+        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: widget.email).snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -74,7 +110,7 @@ class LibraryScreen extends StatelessWidget {
                                   const SizedBox(height: 2),
                                   FittedBox(
                                     child: Text(
-                                      "ID Num: ${snapshot.data!.docs[0]['matricNumber']}",
+                                      "ID Num: ${snapshot.data!.docs[0]['password']}",
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
                                       style: Styles.dashboardTextStyle,
@@ -104,7 +140,7 @@ class LibraryScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        Center(child: Text(snapshot.data!.docs[0]["library"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have pending library issues to resolve before you can continue. Kindly meet to the library admin for more details", style: Styles.clearedTextStyle)),
+                        Center(child: Text(snapshot.data!.docs[0]["library"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have not fulfilled the requirements to clear with the library yet. Kindly go to the library for more details", style: Styles.clearedTextStyle)),
 
                         const SizedBox(height: 60),
                         Row(
@@ -140,7 +176,7 @@ class LibraryScreen extends StatelessWidget {
                                   if(snapshot.data!.docs[0]["library"] == true && snapshot.data!.docs[0]["faculty"] == 'Science') {
                                     Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => LabScreen(email: email,)),
+                                    MaterialPageRoute(builder: (context) => LabScreen(email: widget.email,)),
                                   );
                                   } else if (snapshot.data!.docs[0]["library"] == true && snapshot.data!.docs[0]["faculty"] != 'Science') {
                                     Navigator.push(

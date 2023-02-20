@@ -1,14 +1,44 @@
 import 'package:clearance_app/screens/role_screen.dart';
 import 'package:clearance_app/screens/tuition_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../styles/styles.dart';
 import '../widgets/grad_status_dialog.dart';
 
-class GraduationStatusScreen extends StatelessWidget {
+class GraduationStatusScreen extends StatefulWidget {
   const GraduationStatusScreen({Key? key, required this.email}) : super(key: key);
 
   final String email;
+
+  @override
+  State<GraduationStatusScreen> createState() => _GraduationStatusScreenState();
+}
+
+class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
+  bool _isLoading = false;
+
+  void logOut() async {
+    setState(() {
+      _isLoading = true;
+    });
+    FirebaseAuth.instance.signOut();
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const RoleScreen(),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.black,
+        content: Text('You are logged out!'),
+      ),
+    );
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +50,15 @@ class GraduationStatusScreen extends StatelessWidget {
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
+        leading: InkWell(
+          onTap: () {
+            logOut();
+          },
+            child: Icon(Icons.logout)),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: email).snapshots(),
+        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: widget.email).snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -72,7 +107,7 @@ class GraduationStatusScreen extends StatelessWidget {
                                    const SizedBox(height: 2),
                                    FittedBox(
                                      child: Text(
-                                       "ID Num: ${snapshot.data!.docs[0]['matricNumber']}",
+                                       "ID Num: ${snapshot.data!.docs[0]['password']}",
                                        textAlign: TextAlign.center,
                                        overflow: TextOverflow.ellipsis,
                                        style: Styles.dashboardTextStyle,
@@ -141,7 +176,7 @@ class GraduationStatusScreen extends StatelessWidget {
                                 onPressed: () {
                                   snapshot.data!.docs[0]["graduationStatus"]?  Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => TuitionScreen(email: email,)),
+                                    MaterialPageRoute(builder: (context) => TuitionScreen(email: widget.email,)),
                                   ) : showDialog(
                                       barrierDismissible: true,
                                       context: context,

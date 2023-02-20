@@ -1,5 +1,4 @@
 import 'package:clearance_app/screens/role_screen.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -27,10 +26,10 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   void initState() {
     super.initState();
-    this.faculties.add({"id": 1, "name": "Science"});
+    this.faculties.add({"id": 1, "name": "Natural Science"});
     this.faculties.add({"id": 2, "name": "Art"});
     this.faculties.add({"id": 3, "name": "Management"});
-    this.faculties.add({"id": 4, "name": "Environmental"});
+    this.faculties.add({"id": 4, "name": "Social Science"});
 
     this.departmentsMasters = [
       {"ID": 1, "Name": "Microbiology", "ParentId": 1},
@@ -38,17 +37,17 @@ class _AdminScreenState extends State<AdminScreen> {
       {"ID": 3, "Name": "Chemistry ", "ParentId": 1},
       {"ID": 4, "Name": "Physics", "ParentId": 1},
       {"ID": 1, "Name": "History", "ParentId": 2},
-      {"ID": 2, "Name": "Political Science", "ParentId": 2},
-      {"ID": 3, "Name": "Sociology", "ParentId": 2},
+      {"ID": 2, "Name": "Public Admin", "ParentId": 2},
+      {"ID": 3, "Name": "English Language", "ParentId": 2},
       {"ID": 4, "Name": "Music", "ParentId": 2},
       {"ID": 1, "Name": "Accounting", "ParentId": 3},
       {"ID": 2, "Name": "Business Admin", "ParentId": 3},
       {"ID": 3, "Name": "Banking & finance", "ParentId": 3},
-      {"ID": 4, "Name": "Economics", "ParentId": 3},
-      {"ID": 1, "Name": "Architecture", "ParentId": 4},
-      {"ID": 2, "Name": "Building", "ParentId": 4},
-      {"ID": 3, "Name": "Qty survey", "ParentId": 4},
-      {"ID": 4, "Name": "Geography", "ParentId": 4},
+      {"ID": 4, "Name": "Insurance", "ParentId": 3},
+      {"ID": 1, "Name": "Sociology", "ParentId": 4},
+      {"ID": 2, "Name": "Economics", "ParentId": 4},
+      {"ID": 3, "Name": "Political Science", "ParentId": 4},
+      {"ID": 4, "Name": "Criminology", "ParentId": 4},
     ];
   }
 
@@ -80,6 +79,9 @@ class _AdminScreenState extends State<AdminScreen> {
   bool clearValueLib = false;
   bool unclearValueLib = true;
 
+  bool clearValueClinic = false;
+  bool unclearValueClinic = true;
+
   bool clearValueLab = false;
   bool unclearValueLab = true;
 
@@ -91,10 +93,11 @@ class _AdminScreenState extends State<AdminScreen> {
       email: _emailController.text,
       password: _passwordController.text,
       name: _nameController.text,
-      matNumber: _matricController.text,
+      //matNumber: _matricController.text,
       gradStatus: clearValueGrad,
       tuition: clearValueTuition,
       domitory: clearValueDom,
+      clinic: clearValueClinic,
       library: clearValueLib,
       lab: clearValueLab,
       department: selectedDept.toString(),
@@ -175,35 +178,35 @@ class _AdminScreenState extends State<AdminScreen> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
-            const SizedBox(height: 15),
-            const Text(
-              'Enter Stundent\'s Matriculation number ',
-              style: Styles.fieldTextStyle,
-            ),
-            const SizedBox(height: 5),
-            TextField(
-              maxLength: 23,
-              controller: _matricController,
-              decoration: InputDecoration(
-                counterText: '',
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(
-                  Icons.perm_identity,
-                ),
-                contentPadding: const EdgeInsets.all(18),
-                hintText: 'matric number',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                      color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-                ),
-                hintStyle: Styles.hintTextStyle,
-              ),
-            ),
+            // const SizedBox(height: 15),
+            // const Text(
+            //   'Enter Stundent\'s Matriculation number ',
+            //   style: Styles.fieldTextStyle,
+            // ),
+            // const SizedBox(height: 5),
+            // TextField(
+            //   maxLength: 23,
+            //   controller: _matricController,
+            //   decoration: InputDecoration(
+            //     counterText: '',
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     prefixIcon: const Icon(
+            //       Icons.perm_identity,
+            //     ),
+            //     contentPadding: const EdgeInsets.all(18),
+            //     hintText: 'matric number',
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //       borderSide: const BorderSide(
+            //           color: Color.fromRGBO(20, 10, 38, 1), width: 1),
+            //     ),
+            //     hintStyle: Styles.hintTextStyle,
+            //   ),
+            // ),
             const SizedBox(height: 15),
             const Text(
               'Enter Stundent\'s Email ',
@@ -232,8 +235,12 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
             ),
             const SizedBox(height: 15),
+            // const Text(
+            //   'Create Password',
+            //   style: Styles.fieldTextStyle,
+            // ),
             const Text(
-              'Create Password',
+              'Enter Stundent\'s Matriculation number ',
               style: Styles.fieldTextStyle,
             ),
             const SizedBox(height: 5),
@@ -243,10 +250,10 @@ class _AdminScreenState extends State<AdminScreen> {
                 filled: true,
                 fillColor: Colors.white,
                 prefixIcon: const Icon(
-                  Icons.password,
+                  Icons.drive_file_rename_outline_outlined,
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'password',
+                hintText: 'mat number',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -258,66 +265,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
-            // const SizedBox(height: 15),
-            // const Text(
-            //   'Faculty',
-            //   style: Styles.fieldTextStyle,
-            // ),
-            // const SizedBox(height: 5),
-            // SizedBox(
-            //   height: 56,
-            //   child: DropdownButtonFormField2(
-            //     decoration: InputDecoration(
-            //       //Add isDense true and zero Padding.
-            //       //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-            //       isDense: true,
-            //       contentPadding: EdgeInsets.zero,
-            //       border: OutlineInputBorder(
-            //         borderSide: const BorderSide(
-            //           color: Colors.black,
-            //         ),
-            //         borderRadius: BorderRadius.circular(15),
-            //       ),
-            //       //Add more decoration as you want here
-            //       //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-            //     ),
-            //     isExpanded: true,
-            //     hint: const Text(
-            //       'Faculty*',
-            //       style: Styles.hintTextStyle,
-            //     ),
-            //     icon: const Icon(
-            //       Icons.arrow_drop_down,
-            //       color: Colors.black45,
-            //     ),
-            //     iconSize: 30,
-            //     buttonHeight: 58,
-            //     buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-            //     dropdownDecoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(15),
-            //     ),
-            //     items: facultyItems
-            //         .map((item) => DropdownMenuItem<String>(
-            //               value: item,
-            //               child: Text(
-            //                 item,
-            //                 style: Styles.hintTextStyle,
-            //               ),
-            //             ))
-            //         .toList(),
-            //     validator: (value) {
-            //       if (value == null) {
-            //         return 'Please select a faculty.';
-            //       }
-            //     },
-            //     onChanged: (value) {
-            //       //Do something when changing the item if you want.
-            //     },
-            //     onSaved: (value) {
-            //       selectedValue = value.toString();
-            //     },
-            //   ),
-            // ),
             const SizedBox(height: 15),
             const Text(
               'Enter Stundent\'s Faculty ',
@@ -537,6 +484,51 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 15),
+
+            const Text(
+              'Clinic',
+              style: Styles.fieldTextStyle,
+            ),
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                const Text('Cleared'),
+                const SizedBox(width: 5),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      clearValueClinic = !clearValueClinic;
+                      unclearValueClinic = !unclearValueClinic;
+                    });
+                  },
+                  child: Icon(
+                    clearValueClinic
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 15),
+                const Text('Uncleared'),
+                const SizedBox(width: 5),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      unclearValueClinic = !unclearValueClinic;
+                      clearValueClinic = !clearValueClinic;
+                    });
+                  },
+                  child: Icon(
+                    unclearValueClinic
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+
             const SizedBox(height: 15),
             const Text(
               'Library',

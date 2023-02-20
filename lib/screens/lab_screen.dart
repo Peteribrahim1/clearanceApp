@@ -1,15 +1,46 @@
+import 'package:clearance_app/screens/role_screen.dart';
 import 'package:clearance_app/screens/tuition_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/styles.dart';
 import '../widgets/lab_dialog.dart';
 import 'congrats_screen.dart';
 
-class LabScreen extends StatelessWidget {
+class LabScreen extends StatefulWidget {
   const LabScreen({Key? key, required this.email}) : super(key: key);
 
   final String email;
+
+  @override
+  State<LabScreen> createState() => _LabScreenState();
+}
+
+class _LabScreenState extends State<LabScreen> {
+  bool _isLoading = false;
+
+  void logOut() async {
+    setState(() {
+      _isLoading = true;
+    });
+    FirebaseAuth.instance.signOut();
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const RoleScreen(),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.black,
+        content: Text('You are logged out!'),
+      ),
+    );
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +52,17 @@ class LabScreen extends StatelessWidget {
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
+        leading: InkWell(
+            onTap: () {
+              logOut();
+            },
+            child: Icon(Icons.logout)),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .where("email", isEqualTo: email)
+            .where("email", isEqualTo: widget.email)
             .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -76,7 +112,7 @@ class LabScreen extends StatelessWidget {
                                   const SizedBox(height: 2),
                                   FittedBox(
                                     child: Text(
-                                      "ID Num: ${snapshot.data!.docs[0]['matricNumber']}",
+                                      "ID Num: ${snapshot.data!.docs[0]['password']}",
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
                                       style: Styles.dashboardTextStyle,
@@ -110,7 +146,7 @@ class LabScreen extends StatelessWidget {
                           child: Text(
                               snapshot.data!.docs[0]["laboratory"]
                                   ? "Cleared! click proceed to move to the next stage."
-                                  : "Sorry! You have pending laboratory issues to resolve before you can continue with your clearance. Kindly meet the lab admin for more details.",
+                                  : "Sorry! You have not fulfilled the requirements to clear with the lab yet. Kindly meet the lab admin for more details.",
                               style: Styles.clearedTextStyle),
                         ),
                         const SizedBox(height: 60),

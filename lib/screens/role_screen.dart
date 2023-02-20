@@ -28,7 +28,7 @@ class RoleScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               const Text(
-                'Online Clearance App',
+                'PLASU clearance App',
                 style: Styles.bigTextStyle,
               ),
               const SizedBox(height: 170),

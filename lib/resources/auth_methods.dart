@@ -13,10 +13,11 @@ class AuthMethods {
     required String email,
     required String password,
     required String name,
-    required String matNumber,
+  //  required String matNumber,
     required bool gradStatus,
     required bool tuition,
     required bool domitory,
+    required bool clinic,
     required bool library,
     required bool lab,
     required String department,
@@ -27,7 +28,6 @@ class AuthMethods {
       if (email.isNotEmpty &&
           password.isNotEmpty &&
           name.isNotEmpty &&
-          matNumber.isNotEmpty &&
           department != null &&
           faculty != null) {
 
@@ -40,10 +40,11 @@ class AuthMethods {
         await _firestore.collection('users').doc(cred.user!.uid).set({
           'name': name,
           'email': email,
-          'matricNumber': matNumber,
+        //  'matricNumber': matNumber,
           'graduationStatus': gradStatus,
           'tuitionFee': tuition,
           'domitoryFee': domitory,
+          'clinicStatus': clinic,
           'library': library,
           'laboratory': lab,
           'uid': cred.user!.uid,
@@ -54,8 +55,13 @@ class AuthMethods {
         res = 'success';
       }
     } on FirebaseAuthException catch(err) {
+      print(err.code);
       if (err.code == 'invalid-email') {
         res = 'Wrong email format';
+      } else if (err.code == 'weak-password') {
+        res = 'matric number cannot be less than 6 characters';
+      } else if (err.code == 'email-already-in-use') {
+        res = 'User already exist';
       }
     }
 
@@ -71,7 +77,6 @@ class AuthMethods {
   Future<String> loginUser({
     required String email,
     required String password,
-    required String matric,
     //required String dbMatric,
   }) async {
     String res = 'Some error occured';
@@ -85,11 +90,23 @@ class AuthMethods {
       } else {
         res = 'Please enter all the fields';
       }
-    } catch (err) {
+    } on FirebaseAuthException catch(err) {
+      print(err.code);
+      if (err.code == 'invalid-email') {
+        res = 'Wrong email format';
+      } else if (err.code == 'user-not-found') {
+        res = 'user does not exist';
+      } else if (err.code == 'wrong-password') {
+        res = 'Wrong matric number';
+      }
+    }
+
+    catch (err) {
       res = err.toString();
     }
     return res;
   }
+
 
 // Future<String> loginUser({
 //   required String email,

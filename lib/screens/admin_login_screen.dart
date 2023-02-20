@@ -53,6 +53,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
               const SizedBox(height: 5),
               TextField(
+                obscureText: true,
+                keyboardType: TextInputType.number,
                 controller: _passwordController,
                 decoration: InputDecoration(
                   filled: true,

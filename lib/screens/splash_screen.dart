@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             SizedBox(height: 10),
-            Center(child: Text('Online Clearance', style: TextStyle(fontSize: 20, color: Colors.deepPurple),)),
+            Center(child: Text('PLASU clearance', style: TextStyle(fontSize: 20, color: Colors.deepPurple),)),
           ],
         ),
       ),

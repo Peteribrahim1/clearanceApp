@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 
 class Styles {
   static const appbarColor = Color.fromRGBO(0, 0, 51, 1);
-  //static const buttonColor = Color.fromRGBO(0, 0, 51, 1);
-
-  // static const titleTextStyle = TextStyle(
-  //   fontFamily: 'Raleway',
-  //   fontSize: 20,
-  //   fontWeight: FontWeight.w700,
-  //   color: Color.fromRGBO(0, 0, 51, 1),
-  // );
 
   static const normalTextStyle = TextStyle(
     fontFamily: 'Raleway',

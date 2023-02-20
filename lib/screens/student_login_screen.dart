@@ -18,7 +18,6 @@ class StudentLoginScreen extends StatefulWidget {
 class _StudentLoginScreenState extends State<StudentLoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _matricController = TextEditingController();
 
   bool _isLoading = false;
 
@@ -27,28 +26,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _matricController.dispose();
   }
-
-
-  // String dbMatric = '';
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getMatric();
-  // }
-  //
-  // void getMatric() async {
-  //   DocumentSnapshot snap = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .get();
-  //
-  //   setState(() {
-  //     dbMatric = (snap.data() as Map<String, dynamic>)['matricNumber'];
-  //   });
-  // }
 
 
   void loginUser() async {
@@ -58,7 +36,6 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
     String res = await AuthMethods().loginUser(
       email: _emailController.text,
       password: _passwordController.text,
-      matric: _matricController.text,
       //dbMatric: dbMatric,
     );
 
@@ -102,33 +79,6 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                 ),
               ),
               const SizedBox(height: 25),
-              // const Text(
-              //   'Matriculation number ',
-              //   style: Styles.fieldTextStyle,
-              // ),
-              // const SizedBox(height: 5),
-              // TextField(
-              //   controller: _matricController,
-              //   decoration: InputDecoration(
-              //     filled: true,
-              //     fillColor: Colors.white,
-              //     prefixIcon: const Icon(
-              //       Icons.perm_identity,
-              //     ),
-              //     contentPadding: const EdgeInsets.all(18),
-              //     hintText: 'matric number',
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(15),
-              //     ),
-              //     enabledBorder: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(15),
-              //       borderSide: const BorderSide(
-              //           color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-              //     ),
-              //     hintStyle: Styles.hintTextStyle,
-              //   ),
-              // ),
-              // const SizedBox(height: 15),
               const Text(
                 'Student Email ',
                 style: Styles.fieldTextStyle,
@@ -157,7 +107,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
               ),
               const SizedBox(height: 15),
               const Text(
-                'Password',
+                'Matric Number',
                 style: Styles.fieldTextStyle,
               ),
               const SizedBox(height: 5),
@@ -167,10 +117,10 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   prefixIcon: const Icon(
-                    Icons.password,
+                    Icons.drive_file_rename_outline_outlined,
                   ),
                   contentPadding: const EdgeInsets.all(18),
-                  hintText: 'password',
+                  hintText: 'mat number',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
