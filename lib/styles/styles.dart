@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 
 class Styles {
   static const appbarColor = Color.fromRGBO(0, 0, 51, 1);
-  //static const buttonColor = Color.fromRGBO(0, 0, 51, 1);
-
-  // static const titleTextStyle = TextStyle(
-  //   fontFamily: 'Raleway',
-  //   fontSize: 20,
-  //   fontWeight: FontWeight.w700,
-  //   color: Color.fromRGBO(0, 0, 51, 1),
-  // );
 
   static const normalTextStyle = TextStyle(
     fontFamily: 'Raleway',
@@ -53,11 +45,25 @@ class Styles {
     color: Color.fromRGBO(0, 0, 51, 1),
   );
 
-  static const clearedTextStyle = TextStyle(
+  static const dashboardTextStyle = TextStyle(
     fontFamily: 'Raleway',
-    fontSize: 25,
+    fontSize: 16,
     fontWeight: FontWeight.w600,
     color: Color.fromRGBO(0, 0, 51, 1),
+  );
+
+  static const clearedTextStyle = TextStyle(
+    fontFamily: 'Raleway',
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Color.fromRGBO(0, 0, 51, 1),
+  );
+
+  static const subTextStyle = TextStyle(
+    fontFamily: 'Raleway',
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Colors.deepPurple,
   );
 
   static const headerTextStyle = TextStyle(

@@ -1,7 +1,9 @@
-import 'package:clearance_app/screens/admin_screen.dart';
 import 'package:clearance_app/screens/student_login_screen.dart';
 import 'package:clearance_app/styles/styles.dart';
 import 'package:flutter/material.dart';
+
+import 'admin_login_screen.dart';
+import 'admn_signup_screen.dart';
 
 class RoleScreen extends StatelessWidget {
   static const routeName = '/role';
@@ -26,7 +28,7 @@ class RoleScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               const Text(
-                'Online Clearance App',
+                'PLASU clearance App',
                 style: Styles.bigTextStyle,
               ),
               const SizedBox(height: 170),
@@ -42,7 +44,7 @@ class RoleScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AdminScreen()),
+                      MaterialPageRoute(builder: (context) => const AdminLoginScreen()),
                     );
                   },
                   style: ButtonStyle(

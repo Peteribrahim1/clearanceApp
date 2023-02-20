@@ -1,22 +1,23 @@
-import 'package:clearance_app/screens/domitory_screen.dart';
 import 'package:clearance_app/screens/role_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/styles.dart';
-import '../widgets/tution_dialog.dart';
+import '../widgets/clinic_dialog.dart';
+import '../widgets/domitory_dialog.dart';
+import 'library_screen.dart';
 
-class TuitionScreen extends StatefulWidget {
-  const TuitionScreen({Key? key, required this.email}) : super(key: key);
+class ClinicScreen extends StatefulWidget {
+  const ClinicScreen({Key? key, required this.email}) : super(key: key);
 
   final String email;
 
   @override
-  State<TuitionScreen> createState() => _TuitionScreenState();
+  State<ClinicScreen> createState() => _ClinicScreenState();
 }
 
-class _TuitionScreenState extends State<TuitionScreen> {
+class _ClinicScreenState extends State<ClinicScreen> {
   bool _isLoading = false;
 
   void logOut() async {
@@ -47,7 +48,7 @@ class _TuitionScreenState extends State<TuitionScreen> {
       backgroundColor: Color.fromRGBO(20, 10, 38, 1),
       appBar: AppBar(
         title: const Text(
-          'Tuition Status',
+          'Clinic Status',
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
@@ -84,12 +85,11 @@ class _TuitionScreenState extends State<TuitionScreen> {
                     child: Column(
                       children: [
                         const Text(
-                          'Tuition Status',
+                          'Clinic Status',
                           textAlign: TextAlign.center,
                           style: Styles.subTextStyle,
                         ),
                         const SizedBox(height: 10),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -138,10 +138,8 @@ class _TuitionScreenState extends State<TuitionScreen> {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 10),
-                        Center(child: Text(snapshot.data!.docs[0]["tuitionFee"]?"Fully Paid! Click proceed to move to the next stage." : "Sorry! You still have outstanding fees that must be paid before you can continue with clearance. See coordinator for more details.", style: Styles.clearedTextStyle)),
-
+                        Center(child: Text(snapshot.data!.docs[0]["clinicStatus"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have outstanding issues with the clinic. Kindly clear with the clinic before you can continue.", style: Styles.clearedTextStyle)),
                         const SizedBox(height: 60),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,7 +149,7 @@ class _TuitionScreenState extends State<TuitionScreen> {
                               width: 120,
                               child: ElevatedButton(
                                 onPressed: () {
-                                 Navigator.pop(context);
+                                  Navigator.pop(context);
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
@@ -173,14 +171,14 @@ class _TuitionScreenState extends State<TuitionScreen> {
                               width: 120,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  snapshot.data!.docs[0]["tuitionFee"]?  Navigator.push(
+                                  snapshot.data!.docs[0]["clinicStatus"]?  Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => DomitoryScreen(email: widget.email,)),
+                                    MaterialPageRoute(builder: (context) => LibraryScreen(email: widget.email,)),
                                   ) : showDialog(
                                       barrierDismissible: true,
                                       context: context,
                                       builder: (BuildContext context) =>
-                                      const TuitionDialog());
+                                      const ClinicDialog());
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
