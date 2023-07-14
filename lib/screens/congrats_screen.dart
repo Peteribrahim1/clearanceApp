@@ -1,10 +1,8 @@
 import 'package:clearance_app/screens/role_screen.dart';
-import 'package:clearance_app/screens/tuition_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/styles.dart';
-import 'congrats_screen.dart';
 
 class CongratScreen extends StatefulWidget {
   const CongratScreen({Key? key}) : super(key: key);

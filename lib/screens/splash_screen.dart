@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:clearance_app/screens/role_screen.dart';
 import 'package:flutter/material.dart';
 
-//import '../utils/styles.dart';
-
 class SplashScreen extends StatefulWidget {
   static const routeName = '/splashscreen';
 

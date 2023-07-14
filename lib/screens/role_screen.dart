@@ -3,7 +3,6 @@ import 'package:clearance_app/styles/styles.dart';
 import 'package:flutter/material.dart';
 
 import 'admin_login_screen.dart';
-import 'admn_signup_screen.dart';
 
 class RoleScreen extends StatelessWidget {
   static const routeName = '/role';

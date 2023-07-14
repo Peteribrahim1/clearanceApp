@@ -93,7 +93,6 @@ class _AdminScreenState extends State<AdminScreen> {
       email: _emailController.text,
       password: _passwordController.text,
       name: _nameController.text,
-      //matNumber: _matricController.text,
       gradStatus: clearValueGrad,
       tuition: clearValueTuition,
       domitory: clearValueDom,
@@ -118,7 +117,7 @@ class _AdminScreenState extends State<AdminScreen> {
       );
       //test run
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           backgroundColor: Colors.black,
           content: Text('Student record saved successfully!'),
         ),
@@ -178,35 +177,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
-            // const SizedBox(height: 15),
-            // const Text(
-            //   'Enter Stundent\'s Matriculation number ',
-            //   style: Styles.fieldTextStyle,
-            // ),
-            // const SizedBox(height: 5),
-            // TextField(
-            //   maxLength: 23,
-            //   controller: _matricController,
-            //   decoration: InputDecoration(
-            //     counterText: '',
-            //     filled: true,
-            //     fillColor: Colors.white,
-            //     prefixIcon: const Icon(
-            //       Icons.perm_identity,
-            //     ),
-            //     contentPadding: const EdgeInsets.all(18),
-            //     hintText: 'matric number',
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(15),
-            //     ),
-            //     enabledBorder: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(15),
-            //       borderSide: const BorderSide(
-            //           color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-            //     ),
-            //     hintStyle: Styles.hintTextStyle,
-            //   ),
-            // ),
             const SizedBox(height: 15),
             const Text(
               'Enter Stundent\'s Email ',
@@ -235,10 +205,6 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
             ),
             const SizedBox(height: 15),
-            // const Text(
-            //   'Create Password',
-            //   style: Styles.fieldTextStyle,
-            // ),
             const Text(
               'Enter Stundent\'s Matriculation number ',
               style: Styles.fieldTextStyle,
@@ -280,7 +246,7 @@ class _AdminScreenState extends State<AdminScreen> {
               paddingLeft: 0,
               paddingRight: 0,
               (onChangedVal) {
-               var fid = this.facultyId = onChangedVal;
+                var fid = this.facultyId = onChangedVal;
                 print('selected faculty: $onChangedVal');
 
                 this.departments = this
@@ -295,14 +261,13 @@ class _AdminScreenState extends State<AdminScreen> {
                 setState(() {});
 
                 for (var element in this.faculties) {
-                  if(element['id'] == int.parse(fid)) {
+                  if (element['id'] == int.parse(fid)) {
                     this.selectedFaculty = element['name'];
                   }
                 }
                 setState(() {
                   print(this.selectedFaculty);
                 });
-
               },
               (onValidateVal) {
                 if (onValidateVal == null) {
@@ -312,8 +277,6 @@ class _AdminScreenState extends State<AdminScreen> {
               },
               borderColor: Color.fromRGBO(20, 10, 38, 1),
               borderRadius: 15,
-              // optionValue: 'id',
-              // optionLabel: 'label',
             ),
             const SizedBox(height: 15),
             const Text(
@@ -333,19 +296,16 @@ class _AdminScreenState extends State<AdminScreen> {
                 var id = this.departmentId = onChangedVal;
 
                 print('selected department $onChangedVal');
-                setState(() {
-
-                });
+                setState(() {});
 
                 for (var element in this.departments) {
-                  if(element['ID'] == int.parse(id)) {
+                  if (element['ID'] == int.parse(id)) {
                     this.selectedDept = element['Name'];
                   }
                 }
                 setState(() {
                   print(this.selectedDept);
                 });
-
               },
               (onValidate) {
                 return null;
@@ -485,7 +445,6 @@ class _AdminScreenState extends State<AdminScreen> {
               ],
             ),
             const SizedBox(height: 15),
-
             const Text(
               'Clinic',
               style: Styles.fieldTextStyle,
@@ -528,7 +487,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 15),
             const Text(
               'Library',
@@ -573,7 +531,7 @@ class _AdminScreenState extends State<AdminScreen> {
               ],
             ),
             const SizedBox(height: 15),
-            if (this.selectedFaculty == 'Science')...[
+            if (this.selectedFaculty == 'Science') ...[
               const Text(
                 'Laboratory',
                 style: Styles.fieldTextStyle,
@@ -617,7 +575,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
             ],
-
             const SizedBox(height: 35),
             Center(
               child: SizedBox(

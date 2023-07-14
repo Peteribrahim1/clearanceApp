@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,7 +12,6 @@ class AuthMethods {
     required String email,
     required String password,
     required String name,
-  //  required String matNumber,
     required bool gradStatus,
     required bool tuition,
     required bool domitory,
@@ -40,7 +38,6 @@ class AuthMethods {
         await _firestore.collection('users').doc(cred.user!.uid).set({
           'name': name,
           'email': email,
-        //  'matricNumber': matNumber,
           'graduationStatus': gradStatus,
           'tuitionFee': tuition,
           'domitoryFee': domitory,
@@ -77,7 +74,6 @@ class AuthMethods {
   Future<String> loginUser({
     required String email,
     required String password,
-    //required String dbMatric,
   }) async {
     String res = 'Some error occured';
 
@@ -106,32 +102,4 @@ class AuthMethods {
     }
     return res;
   }
-
-
-// Future<String> loginUser({
-//   required String email,
-//   required String password,
-//   required String matric,
-//   required String dbMatric,
-// }) async {
-//   String res = 'Some error occured';
-//
-//   try {
-//     if (email.isNotEmpty && password.isNotEmpty && matric.isNotEmpty) {
-//       if (matric == dbMatric) {
-//         await _auth.signInWithEmailAndPassword(
-//             email: email, password: password);
-//
-//         res = 'success';
-//       }
-//
-//     } else {
-//       res = 'Please enter all the fields';
-//     }
-//   } catch (err) {
-//     res = err.toString();
-//   }
-//   return res;
-// }
-
 }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../styles/styles.dart';
 import '../widgets/clinic_dialog.dart';
-import '../widgets/domitory_dialog.dart';
 import 'library_screen.dart';
 
 class ClinicScreen extends StatefulWidget {
@@ -204,7 +203,6 @@ class _ClinicScreenState extends State<ClinicScreen> {
               ],
             ),
           );
-
         },
       ),
     );
