@@ -40,14 +40,15 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.33),
             Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                child: Icon(Icons.school, size: 120, color: Colors.deepPurple,),
-              ),
+              child: Image.asset('assets/images/gsulogo.jpeg'),
             ),
             SizedBox(height: 10),
-            Center(child: Text('PLASU clearance', style: TextStyle(fontSize: 20, color: Colors.deepPurple),)),
+            const Center(
+                child: Text(
+              'GSU clearance',
+              style:
+                  TextStyle(fontSize: 20, color: Color.fromRGBO(0, 106, 78, 1)),
+            )),
           ],
         ),
       ),

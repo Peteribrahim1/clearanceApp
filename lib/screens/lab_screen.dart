@@ -19,6 +19,14 @@ class LabScreen extends StatefulWidget {
 class _LabScreenState extends State<LabScreen> {
   bool _isLoading = false;
 
+  bool isLoadingS = false;
+
+  Future<void> simulateNetworkRequest() async {
+    // Simulate a network request or any other time-consuming task.
+    await Future.delayed(
+        const Duration(seconds: 2)); // Simulate a 2-second delay.
+  }
+
   void logOut() async {
     setState(() {
       _isLoading = true;
@@ -44,7 +52,7 @@ class _LabScreenState extends State<LabScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(20, 10, 38, 1),
+      backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       appBar: AppBar(
         title: const Text(
           'Lab Status',
@@ -55,7 +63,10 @@ class _LabScreenState extends State<LabScreen> {
             onTap: () {
               logOut();
             },
-            child: Icon(Icons.logout)),
+            child: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            )),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
@@ -95,7 +106,11 @@ class _LabScreenState extends State<LabScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.person, size: 115, color: Colors.grey,),
+                            const Icon(
+                              Icons.person,
+                              size: 115,
+                              color: Colors.grey,
+                            ),
                             Flexible(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,8 +175,8 @@ class _LabScreenState extends State<LabScreen> {
                                   Navigator.pop(context);
                                 },
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.blue),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -179,7 +194,17 @@ class _LabScreenState extends State<LabScreen> {
                               height: 48,
                               width: 120,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoadingS = true;
+                                  });
+
+                                  await simulateNetworkRequest();
+
+                                  setState(() {
+                                    isLoadingS = false;
+                                  });
+
                                   snapshot.data!.docs[0]["laboratory"]
                                       ? Navigator.push(
                                           context,
@@ -196,7 +221,7 @@ class _LabScreenState extends State<LabScreen> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.deepPurple),
+                                      const Color.fromRGBO(0, 106, 78, 1)),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -204,10 +229,14 @@ class _LabScreenState extends State<LabScreen> {
                                     ),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Proceed',
-                                  style: Styles.buttonTextStyle,
-                                ),
+                                child: isLoadingS
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Proceed',
+                                        style: Styles.buttonTextStyle,
+                                      ),
                               ),
                             ),
                           ],

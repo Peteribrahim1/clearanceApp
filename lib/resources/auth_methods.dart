@@ -28,7 +28,6 @@ class AuthMethods {
           name.isNotEmpty &&
           department != null &&
           faculty != null) {
-
         // register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -51,19 +50,16 @@ class AuthMethods {
         });
         res = 'success';
       }
-    } on FirebaseAuthException catch(err) {
+    } on FirebaseAuthException catch (err) {
       print(err.code);
       if (err.code == 'invalid-email') {
         res = 'Wrong email format';
       } else if (err.code == 'weak-password') {
-        res = 'matric number cannot be less than 6 characters';
+        res = 'registration number cannot be less than 6 characters';
       } else if (err.code == 'email-already-in-use') {
         res = 'User already exist';
       }
-    }
-
-
-    catch (err) {
+    } catch (err) {
       res = err.toString();
       print(err.toString());
     }
@@ -86,18 +82,16 @@ class AuthMethods {
       } else {
         res = 'Please enter all the fields';
       }
-    } on FirebaseAuthException catch(err) {
+    } on FirebaseAuthException catch (err) {
       print(err.code);
       if (err.code == 'invalid-email') {
         res = 'Wrong email format';
       } else if (err.code == 'user-not-found') {
         res = 'user does not exist';
       } else if (err.code == 'wrong-password') {
-        res = 'Wrong matric number';
+        res = 'Wrong registration number';
       }
-    }
-
-    catch (err) {
+    } catch (err) {
       res = err.toString();
     }
     return res;

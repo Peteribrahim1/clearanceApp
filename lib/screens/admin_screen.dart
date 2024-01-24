@@ -26,7 +26,7 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   void initState() {
     super.initState();
-    this.faculties.add({"id": 1, "name": "Natural Science"});
+    this.faculties.add({"id": 1, "name": "Sciences"});
     this.faculties.add({"id": 2, "name": "Art"});
     this.faculties.add({"id": 3, "name": "Management"});
     this.faculties.add({"id": 4, "name": "Social Science"});
@@ -118,7 +118,7 @@ class _AdminScreenState extends State<AdminScreen> {
       //test run
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.green,
           content: Text('Student record saved successfully!'),
         ),
       );
@@ -134,7 +134,7 @@ class _AdminScreenState extends State<AdminScreen> {
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
+        backgroundColor: const Color.fromRGBO(0, 106, 78, 1),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -206,7 +206,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 15),
             const Text(
-              'Enter Stundent\'s Matriculation number ',
+              'Enter Stundent\'s Registration number ',
               style: Styles.fieldTextStyle,
             ),
             const SizedBox(height: 5),
@@ -219,7 +219,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   Icons.drive_file_rename_outline_outlined,
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'mat number',
+                hintText: 'reg number',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -531,7 +531,7 @@ class _AdminScreenState extends State<AdminScreen> {
               ],
             ),
             const SizedBox(height: 15),
-            if (this.selectedFaculty == 'Science') ...[
+            if (this.selectedFaculty == 'Sciences') ...[
               const Text(
                 'Laboratory',
                 style: Styles.fieldTextStyle,
@@ -584,7 +584,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   onPressed: signUpUser,
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      Colors.deepPurple,
+                      Color.fromRGBO(0, 106, 78, 1),
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(

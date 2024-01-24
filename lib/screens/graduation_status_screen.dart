@@ -7,7 +7,8 @@ import '../styles/styles.dart';
 import '../widgets/grad_status_dialog.dart';
 
 class GraduationStatusScreen extends StatefulWidget {
-  const GraduationStatusScreen({Key? key, required this.email}) : super(key: key);
+  const GraduationStatusScreen({Key? key, required this.email})
+      : super(key: key);
 
   final String email;
 
@@ -17,6 +18,14 @@ class GraduationStatusScreen extends StatefulWidget {
 
 class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
   bool _isLoading = false;
+
+  bool isLoadingS = false;
+
+  Future<void> simulateNetworkRequest() async {
+    // Simulate a network request or any other time-consuming task.
+    await Future.delayed(
+        const Duration(seconds: 2)); // Simulate a 2-second delay.
+  }
 
   void logOut() async {
     setState(() {
@@ -31,7 +40,7 @@ class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
         content: Text('You are logged out!'),
       ),
     );
@@ -51,14 +60,20 @@ class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
         ),
         centerTitle: true,
         leading: InkWell(
-          onTap: () {
-            logOut();
-          },
-            child: Icon(Icons.logout)),
+            onTap: () {
+              logOut();
+            },
+            child: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            )),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: widget.email).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where("email", isEqualTo: widget.email)
+            .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -88,58 +103,65 @@ class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
                           style: Styles.subTextStyle,
                         ),
                         const SizedBox(height: 10),
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.start,
-                           children: [
-                             Icon(Icons.person, size: 115, color: Colors.grey,),
-                             Flexible(
-                               child: Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 children: [
-                                   FittedBox(
-                                     child: Text(
-                                       "Name: ${snapshot.data!.docs[0]['name']}",
-                                       textAlign: TextAlign.center,
-                                       overflow: TextOverflow.ellipsis,
-                                       style: Styles.dashboardTextStyle,
-                                     ),
-                                   ),
-                                   const SizedBox(height: 2),
-                                   FittedBox(
-                                     child: Text(
-                                       "ID Num: ${snapshot.data!.docs[0]['password']}",
-                                       textAlign: TextAlign.center,
-                                       overflow: TextOverflow.ellipsis,
-                                       style: Styles.dashboardTextStyle,
-                                     ),
-                                   ),
-                                   const SizedBox(height: 2),
-                                   FittedBox(
-                                     child: Text(
-                                       "Faculty: ${snapshot.data!.docs[0]['faculty']}",
-                                       textAlign: TextAlign.center,
-                                       overflow: TextOverflow.ellipsis,
-                                       style: Styles.dashboardTextStyle,
-                                     ),
-                                   ),
-                                   const SizedBox(height: 2),
-                                   FittedBox(
-                                     child: Text(
-                                       "Dept: ${snapshot.data!.docs[0]['department']}",
-                                       textAlign: TextAlign.center,
-                                       overflow: TextOverflow.ellipsis,
-                                       style: Styles.dashboardTextStyle,
-                                     ),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                           ],
-                         ),
-
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.person,
+                              size: 115,
+                              color: Colors.grey,
+                            ),
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FittedBox(
+                                    child: Text(
+                                      "Name: ${snapshot.data!.docs[0]['name']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  FittedBox(
+                                    child: Text(
+                                      "ID Num: ${snapshot.data!.docs[0]['password']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  FittedBox(
+                                    child: Text(
+                                      "Faculty: ${snapshot.data!.docs[0]['faculty']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  FittedBox(
+                                    child: Text(
+                                      "Dept: ${snapshot.data!.docs[0]['department']}",
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.dashboardTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 10),
-                         Center(child: Text(snapshot.data!.docs[0]["graduationStatus"]?"Qualified! Click proceed to move to the next stage." : "Sorry! You have pending academic issues to clear before you can continue with your clearance. See your coordinator for more details.", style: Styles.clearedTextStyle)),
-
+                        Center(
+                            child: Text(
+                                snapshot.data!.docs[0]["graduationStatus"]
+                                    ? "Qualified! Click proceed to move to the next stage."
+                                    : "Sorry! You have pending academic issues to clear before you can continue with your clearance. See your coordinator for more details.",
+                                style: Styles.clearedTextStyle)),
                         const SizedBox(height: 60),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,13 +173,16 @@ class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const RoleScreen()),
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RoleScreen()),
                                   );
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.blue),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -173,29 +198,50 @@ class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
                               height: 48,
                               width: 120,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  snapshot.data!.docs[0]["graduationStatus"]?  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => TuitionScreen(email: widget.email,)),
-                                  ) : showDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                      const GraduationDialog());
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoadingS = true;
+                                  });
+
+                                  await simulateNetworkRequest();
+
+                                  setState(() {
+                                    isLoadingS = false;
+                                  });
+
+                                  snapshot.data!.docs[0]["graduationStatus"]
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TuitionScreen(
+                                                    email: widget.email,
+                                                  )),
+                                        )
+                                      : showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              const GraduationDialog());
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.deepPurple),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Proceed',
-                                  style: Styles.buttonTextStyle,
-                                ),
+                                child: isLoadingS
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Proceed',
+                                        style: Styles.buttonTextStyle,
+                                      ),
                               ),
                             ),
                           ],
@@ -207,7 +253,6 @@ class _GraduationStatusScreenState extends State<GraduationStatusScreen> {
               ],
             ),
           );
-
         },
       ),
     );

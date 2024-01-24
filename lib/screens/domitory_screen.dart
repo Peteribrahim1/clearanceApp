@@ -19,6 +19,14 @@ class DomitoryScreen extends StatefulWidget {
 class _DomitoryScreenState extends State<DomitoryScreen> {
   bool _isLoading = false;
 
+  bool isLoadingS = false;
+
+  Future<void> simulateNetworkRequest() async {
+    // Simulate a network request or any other time-consuming task.
+    await Future.delayed(
+        const Duration(seconds: 2)); // Simulate a 2-second delay.
+  }
+
   void logOut() async {
     setState(() {
       _isLoading = true;
@@ -32,7 +40,7 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
         content: Text('You are logged out!'),
       ),
     );
@@ -44,10 +52,10 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(20, 10, 38, 1),
+      backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       appBar: AppBar(
         title: const Text(
-          'Domitory Status',
+          'Hostel Status',
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
@@ -55,7 +63,10 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
             onTap: () {
               logOut();
             },
-            child: Icon(Icons.logout)),
+            child: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            )),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
@@ -87,7 +98,7 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
                     child: Column(
                       children: [
                         const Text(
-                          'Domitory Status',
+                          'Hostel Status',
                           textAlign: TextAlign.center,
                           style: Styles.subTextStyle,
                         ),
@@ -95,7 +106,7 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.person,
                               size: 115,
                               color: Colors.grey,
@@ -163,8 +174,8 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
                                   Navigator.pop(context);
                                 },
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.blue),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -182,7 +193,17 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
                               height: 48,
                               width: 120,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoadingS = true;
+                                  });
+
+                                  await simulateNetworkRequest();
+
+                                  setState(() {
+                                    isLoadingS = false;
+                                  });
+
                                   snapshot.data!.docs[0]["domitoryFee"]
                                       ? Navigator.push(
                                           context,
@@ -200,7 +221,7 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.deepPurple),
+                                      const Color.fromRGBO(0, 106, 78, 1)),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -208,10 +229,14 @@ class _DomitoryScreenState extends State<DomitoryScreen> {
                                     ),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Proceed',
-                                  style: Styles.buttonTextStyle,
-                                ),
+                                child: isLoadingS
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Proceed',
+                                        style: Styles.buttonTextStyle,
+                                      ),
                               ),
                             ),
                           ],

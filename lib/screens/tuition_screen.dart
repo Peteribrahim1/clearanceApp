@@ -19,6 +19,14 @@ class TuitionScreen extends StatefulWidget {
 class _TuitionScreenState extends State<TuitionScreen> {
   bool _isLoading = false;
 
+  bool isLoadingS = false;
+
+  Future<void> simulateNetworkRequest() async {
+    // Simulate a network request or any other time-consuming task.
+    await Future.delayed(
+        const Duration(seconds: 2)); // Simulate a 2-second delay.
+  }
+
   void logOut() async {
     setState(() {
       _isLoading = true;
@@ -32,7 +40,7 @@ class _TuitionScreenState extends State<TuitionScreen> {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
         content: Text('You are logged out!'),
       ),
     );
@@ -44,7 +52,7 @@ class _TuitionScreenState extends State<TuitionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(20, 10, 38, 1),
+      backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       appBar: AppBar(
         title: const Text(
           'Tuition Status',
@@ -55,11 +63,17 @@ class _TuitionScreenState extends State<TuitionScreen> {
             onTap: () {
               logOut();
             },
-            child: Icon(Icons.logout)),
+            child: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            )),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: widget.email).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where("email", isEqualTo: widget.email)
+            .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -89,11 +103,14 @@ class _TuitionScreenState extends State<TuitionScreen> {
                           style: Styles.subTextStyle,
                         ),
                         const SizedBox(height: 10),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.person, size: 115, color: Colors.grey,),
+                            const Icon(
+                              Icons.person,
+                              size: 115,
+                              color: Colors.grey,
+                            ),
                             Flexible(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,10 +155,13 @@ class _TuitionScreenState extends State<TuitionScreen> {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 10),
-                        Center(child: Text(snapshot.data!.docs[0]["tuitionFee"]?"Fully Paid! Click proceed to move to the next stage." : "Sorry! You still have outstanding fees that must be paid before you can continue with clearance. See coordinator for more details.", style: Styles.clearedTextStyle)),
-
+                        Center(
+                            child: Text(
+                                snapshot.data!.docs[0]["tuitionFee"]
+                                    ? "Fully Paid! Click proceed to move to the next stage."
+                                    : "Sorry! You still have outstanding fees that must be paid before you can continue with clearance. See coordinator for more details.",
+                                style: Styles.clearedTextStyle)),
                         const SizedBox(height: 60),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,12 +171,13 @@ class _TuitionScreenState extends State<TuitionScreen> {
                               width: 120,
                               child: ElevatedButton(
                                 onPressed: () {
-                                 Navigator.pop(context);
+                                  Navigator.pop(context);
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.blue),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -172,29 +193,50 @@ class _TuitionScreenState extends State<TuitionScreen> {
                               height: 48,
                               width: 120,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  snapshot.data!.docs[0]["tuitionFee"]?  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => DomitoryScreen(email: widget.email,)),
-                                  ) : showDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                      const TuitionDialog());
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoadingS = true;
+                                  });
+
+                                  await simulateNetworkRequest();
+
+                                  setState(() {
+                                    isLoadingS = false;
+                                  });
+
+                                  snapshot.data!.docs[0]["tuitionFee"]
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DomitoryScreen(
+                                                    email: widget.email,
+                                                  )),
+                                        )
+                                      : showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              const TuitionDialog());
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.deepPurple),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Proceed',
-                                  style: Styles.buttonTextStyle,
-                                ),
+                                child: isLoadingS
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Proceed',
+                                        style: Styles.buttonTextStyle,
+                                      ),
                               ),
                             ),
                           ],
@@ -206,7 +248,6 @@ class _TuitionScreenState extends State<TuitionScreen> {
               ],
             ),
           );
-
         },
       ),
     );

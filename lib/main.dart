@@ -1,3 +1,4 @@
+import 'package:clearance_app/screens/clearance_list_screen.dart';
 import 'package:clearance_app/screens/role_screen.dart';
 import 'package:clearance_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (ctx) => SplashScreen(),
-         RoleScreen.routeName: (ctx) => RoleScreen(),
+        RoleScreen.routeName: (ctx) => RoleScreen(),
       },
+      //  home: ClearanceList(),
     );
   }
 }

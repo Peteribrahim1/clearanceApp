@@ -92,7 +92,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              backgroundColor: Colors.black,
+                              backgroundColor: Colors.red,
                               content: Text('Incorrect admin access code!'),
                             ),
                           );
@@ -100,7 +100,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            backgroundColor: Colors.black,
+                            backgroundColor: Colors.red,
                             content: Text('Please enter the access code!'),
                           ),
                         );
@@ -108,7 +108,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          Colors.deepPurple,
+                          const Color.fromRGBO(0, 106, 78, 1),
                         ),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(

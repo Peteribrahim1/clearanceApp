@@ -1,3 +1,4 @@
+import 'package:clearance_app/screens/clearance_list_screen.dart';
 import 'package:clearance_app/screens/graduation_status_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,6 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
     _passwordController.dispose();
   }
 
-
   void loginUser() async {
     setState(() {
       _isLoading = true;
@@ -40,7 +40,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
     if (res == 'success') {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => GraduationStatusScreen(email: _emailController.text),
+          builder: (context) => ClearanceList(email: _emailController.text),
         ),
       );
     } else {
@@ -70,7 +70,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                 ],
               ),
               const SizedBox(height: 15),
-               const Center(
+              const Center(
                 child: Text(
                   'Student login',
                   style: Styles.headerTextStyle,
@@ -105,7 +105,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
               ),
               const SizedBox(height: 15),
               const Text(
-                'Matric Number',
+                'Registration Number',
                 style: Styles.fieldTextStyle,
               ),
               const SizedBox(height: 5),
@@ -118,7 +118,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                     Icons.drive_file_rename_outline_outlined,
                   ),
                   contentPadding: const EdgeInsets.all(18),
-                  hintText: 'mat number',
+                  hintText: 'reg number',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -139,7 +139,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                     onPressed: loginUser,
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          Colors.deepPurple,
+                          const Color.fromRGBO(0, 106, 78, 1),
                         ),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(

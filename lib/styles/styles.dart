@@ -31,6 +31,13 @@ class Styles {
     color: Color.fromRGBO(0, 0, 51, 1),
   );
 
+  static const fieldTextStyle2 = TextStyle(
+    fontFamily: 'Raleway',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Color.fromRGBO(0, 106, 78, 1),
+  );
+
   static const buttonTextStyle = TextStyle(
     fontFamily: 'Raleway',
     fontSize: 16,
@@ -63,7 +70,7 @@ class Styles {
     fontFamily: 'Raleway',
     fontSize: 18,
     fontWeight: FontWeight.w600,
-    color: Colors.deepPurple,
+    color: Color.fromRGBO(0, 106, 78, 1),
   );
 
   static const headerTextStyle = TextStyle(
@@ -86,5 +93,4 @@ class Styles {
     fontWeight: FontWeight.w700,
     color: Color.fromRGBO(0, 0, 51, 1),
   );
-
 }

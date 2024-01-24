@@ -27,7 +27,7 @@ class _CongratScreenState extends State<CongratScreen> {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
         content: Text('You are logged out!'),
       ),
     );
@@ -54,7 +54,8 @@ class _CongratScreenState extends State<CongratScreen> {
                 height: 350,
                 width: double.infinity,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
+                  padding: const EdgeInsets.only(
+                      top: 40, left: 20, right: 20, bottom: 20),
                   child: Column(
                     children: [
                       const Text(
@@ -74,12 +75,13 @@ class _CongratScreenState extends State<CongratScreen> {
                         width: 160,
                         child: ElevatedButton(
                           onPressed: () {
-                           logOut();
+                            logOut();
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                                Colors.deepPurple),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                const Color.fromRGBO(0, 106, 78, 1)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),

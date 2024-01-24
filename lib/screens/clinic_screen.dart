@@ -19,6 +19,14 @@ class ClinicScreen extends StatefulWidget {
 class _ClinicScreenState extends State<ClinicScreen> {
   bool _isLoading = false;
 
+  bool isLoadingS = false;
+
+  Future<void> simulateNetworkRequest() async {
+    // Simulate a network request or any other time-consuming task.
+    await Future.delayed(
+        const Duration(seconds: 2)); // Simulate a 2-second delay.
+  }
+
   void logOut() async {
     setState(() {
       _isLoading = true;
@@ -32,7 +40,7 @@ class _ClinicScreenState extends State<ClinicScreen> {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
         content: Text('You are logged out!'),
       ),
     );
@@ -55,11 +63,17 @@ class _ClinicScreenState extends State<ClinicScreen> {
             onTap: () {
               logOut();
             },
-            child: Icon(Icons.logout)),
+            child: Icon(
+              Icons.logout,
+              color: Colors.red,
+            )),
         backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').where("email", isEqualTo: widget.email).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where("email", isEqualTo: widget.email)
+            .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -92,7 +106,11 @@ class _ClinicScreenState extends State<ClinicScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.person, size: 115, color: Colors.grey,),
+                            Icon(
+                              Icons.person,
+                              size: 115,
+                              color: Colors.grey,
+                            ),
                             Flexible(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +156,12 @@ class _ClinicScreenState extends State<ClinicScreen> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        Center(child: Text(snapshot.data!.docs[0]["clinicStatus"]?"Cleared! click proceed to move to the next stage." : "Sorry! You have outstanding issues with the clinic. Kindly clear with the clinic before you can continue.", style: Styles.clearedTextStyle)),
+                        Center(
+                            child: Text(
+                                snapshot.data!.docs[0]["clinicStatus"]
+                                    ? "Cleared! click proceed to move to the next stage."
+                                    : "Sorry! You have outstanding issues with the clinic. Kindly clear with the clinic before you can continue.",
+                                style: Styles.clearedTextStyle)),
                         const SizedBox(height: 60),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,8 +175,9 @@ class _ClinicScreenState extends State<ClinicScreen> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.blue),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -169,29 +193,50 @@ class _ClinicScreenState extends State<ClinicScreen> {
                               height: 48,
                               width: 120,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  snapshot.data!.docs[0]["clinicStatus"]?  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => LibraryScreen(email: widget.email,)),
-                                  ) : showDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                      const ClinicDialog());
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoadingS = true;
+                                  });
+
+                                  await simulateNetworkRequest();
+
+                                  setState(() {
+                                    isLoadingS = false;
+                                  });
+
+                                  snapshot.data!.docs[0]["clinicStatus"]
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LibraryScreen(
+                                                    email: widget.email,
+                                                  )),
+                                        )
+                                      : showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              const ClinicDialog());
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Colors.deepPurple),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      const Color.fromRGBO(0, 106, 78, 1)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Proceed',
-                                  style: Styles.buttonTextStyle,
-                                ),
+                                child: isLoadingS
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Proceed',
+                                        style: Styles.buttonTextStyle,
+                                      ),
                               ),
                             ),
                           ],

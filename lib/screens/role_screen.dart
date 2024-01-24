@@ -13,6 +13,7 @@ class RoleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(20, 10, 38, 1),
+      //backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -27,7 +28,7 @@ class RoleScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               const Text(
-                'PLASU clearance App',
+                'GSU clearance App',
                 style: Styles.bigTextStyle,
               ),
               const SizedBox(height: 170),
@@ -43,12 +44,13 @@ class RoleScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AdminLoginScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const AdminLoginScreen()),
                     );
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                        Colors.deepPurple),
+                        Color.fromRGBO(0, 106, 78, 1)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -74,12 +76,13 @@ class RoleScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const StudentLoginScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const StudentLoginScreen()),
                     );
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                        Colors.blue),
+                        Color.fromRGBO(0, 106, 78, 1)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
